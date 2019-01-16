@@ -9,6 +9,12 @@ The cluster-admin role binding is setup to have:
 1. a global group called aks-cluster-admins
 2. a group for just the aks cluster called: <cluster-name>-cluster-admins
 
+To add yourself to the global cluster admins group run:
+```bash
+OBJECT_ID=$(az ad user list --query "[?userPrincipalName=='$(az account show --query user.name -o tsv)'].objectId" -o tsv)
+az ad group member add --group aks-cluster-admins --member-id ${OBJECT_ID}
+```
+
 There is then groups setup to mimic teams:
 A one off run of this script was done:
 ```bash
