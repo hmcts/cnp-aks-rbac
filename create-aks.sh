@@ -15,7 +15,6 @@ then
   exit 1
 fi
 
-set -x
 az group create --name ${BASE_NAME} --location uksouth
 
 TENANT_ID=$(az account show --query tenantId -o tsv)
@@ -29,12 +28,18 @@ az aks create \
   --aad-client-app-id ${CLIENT_APP_ID} \
   --aad-tenant-id ${TENANT_ID} \
   --kubernetes-version 1.11.5 \
-  --location uksouth \
-  --network-plugin azure
+  --location uksouth
+
+./create-cluster-role-setup.sh ${BASE_NAME}
 
 # TODO - we will want to add these so that azure doesn't generate for us:
+# --network-plugin azure
 # "aksVnetResourceGroup"
 # "aksVnetName"
 # "aksSubnetName"
 # "dnsPrefix"
 # "sshPublicKey"
+# disk size (30 GB is default I think and prob too small)
+# vm type (use B-series for nonprod clusters)
+# node count
+# SP username and password (if we're creating beforehand in future)

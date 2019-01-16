@@ -31,7 +31,15 @@ while true; do
     esac
 done
 
-CLIENT_APP_ID=$(az ad app create --display-name ${CLIENT_APP_NAME} --native-app --required-resource-accesses @client-manifest.json  --query appId -o tsv)
+CLIENT_APP_ID=$(az ad app create --display-name ${CLIENT_APP_NAME} --native-app --reply-urls http://localhost/client --required-resource-accesses @client-manifest.json  --query appId -o tsv)
+
+while true; do
+    read -p "You now need to go to the portal, and grant permissions for ${CLIENT_APP_NAME}, after complete type (done)? " answer
+    case $answer in
+        [dD]* ) break;;
+        * ) echo "Please answer with 'done'";;
+    esac
+done
 
 echo "Server app ID: ${SERVER_APP_ID}"
 echo "Server app password: ${SERVER_APP_PASSWORD}"
