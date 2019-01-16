@@ -1,2 +1,2 @@
 client-manifest.json
-rbac-aad-cluster-admin.yaml
+templates/substituted/*.yaml

@@ -23,8 +23,6 @@ az ad app update --id ${SERVER_APP_ID} --set groupMembershipClaims=All
 
 envsubst < client-manifest.template.json > client-manifest.json
 
-echo $SERVER_APP_ID
-
 while true; do
     read -p "You now need to go to the portal, and grant permissions for ${SERVER_APP_NAME}, after complete type (done)? " answer
     case $answer in
