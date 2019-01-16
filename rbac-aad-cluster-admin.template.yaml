@@ -9,7 +9,7 @@ roleRef:
 subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: Group
-  name: "tim-aks-cluster-admins"
+  name: "${CLUSTER_ADMIN_GROUP}"
 - apiGroup: rbac.authorization.k8s.io
   kind: Group
   name: "aks-cluster-admins"
