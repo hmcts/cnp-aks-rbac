@@ -31,6 +31,11 @@ echo 'aks-cluster-reader:'
 az ad group create  --display-name aks-cluster-reader --mail-nickname aks-cluster-reader --query objectId -o tsv 
 ```
 
+By default:
 The `developers` group has global log reading permissions
-The `aks-cluster-reader` has global read (except secrets, roles and role bindings)
-The `<team-name>-developers` group has global read (same exceptions as global) in the team namespace
+The `aks-cluster-reader` group has global read (except secrets, roles and role bindings)
+The `<team-name>-developers` group in the team namespace has read (same exceptions as global)
+
+There is also some environment variables that can be set to enable more permissions for developers:
+`DEVELOPERS_EDIT_TEAM_SCOPED` will give edit access in the team namespace
+`DEVELOPERS_EDIT_GLOBAL_SCOPED` will give edit access globally

@@ -60,4 +60,16 @@ for TEAM_NAME in ${TEAM_NAMES}; do
   export TEAM_GROUP=$(az ad group list --query  "[?displayName=='${TEAM_NAME}-developers'].objectId" -o tsv)
   envsubst < templates/view-binding-team.template.yaml > templates/substituted/view-binding-${TEAM_NAME}.yaml
   kubectl apply -f templates/substituted/view-binding-${TEAM_NAME}.yaml
+
+  if [ "${DEVELOPERS_EDIT_TEAM_SCOPED}" == "true" ]; then
+    echo "Developers edit access at ${TEAM_NAME} namespace enabled"
+    envsubst < templates/edit-binding-team.template.yaml > templates/substituted/edit-binding-${TEAM_NAME}.yaml
+    kubectl apply -f templates/substituted/edit-binding-${TEAM_NAME}.yaml
+  fi
 done
+
+if [ "${DEVELOPERS_EDIT_GLOBAL_SCOPED}" == "true" ]; then
+    echo "Developers edit access at global namespace enabled"
+    envsubst < templates/developers-edit-binding.template.yaml > templates/substituted/developers-edit-binding.yaml
+    kubectl apply -f templates/substituted/developers-edit-binding.yaml
+fi
