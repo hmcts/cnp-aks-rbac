@@ -24,7 +24,7 @@ az ad app update --id ${SERVER_APP_ID} --set groupMembershipClaims=All
 envsubst < client-manifest.template.json > client-manifest.json
 
 while true; do
-    read -p "You now need to go to the portal, and grant permissions for ${SERVER_APP_NAME}, after complete type (done)? " answer
+    read -p "You now need to go to the portal, Azure AD -> app registrations -> ${SERVER_APP_NAME} -> settings -> required permissions, click grant permissions, after complete type (done)? " answer
     case $answer in
         [dD]* ) break;;
         * ) echo "Please answer with 'done'";;
@@ -34,7 +34,7 @@ done
 CLIENT_APP_ID=$(az ad app create --display-name ${CLIENT_APP_NAME} --native-app --reply-urls http://localhost/client --required-resource-accesses @client-manifest.json  --query appId -o tsv)
 
 while true; do
-    read -p "You now need to go to the portal, and grant permissions for ${CLIENT_APP_NAME}, after complete type (done)? " answer
+    read -p "You now need to go to the portal, Azure AD -> app registrations -> ${CLIENT_APP_NAME} -> settings -> required permissions -> ${SERVER_APP_NAME} -> Select the check box next to Access ${SERVER_APP_NAME}, save and click grant permissions, after complete type (done)? " answer
     case $answer in
         [dD]* ) break;;
         * ) echo "Please answer with 'done'";;
