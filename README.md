@@ -26,6 +26,11 @@ echo 'probate:'
 az ad group create  --display-name probate-developers --mail-nickname probate-developers --query objectId -o tsv 
 echo 'divorce:'
 az ad group create  --display-name divorce-developers --mail-nickname divorce-developers --query objectId -o tsv 
+
+echo 'aks-cluster-reader:'
+az ad group create  --display-name aks-cluster-reader --mail-nickname aks-cluster-reader --query objectId -o tsv 
 ```
 
-The developers group has global log reading permissions
+The `developers` group has global log reading permissions
+The `aks-cluster-reader` has global read (except secrets, roles and role bindings)
+The `<team-name>-developers` group has global read (same exceptions as global) in the team namespace

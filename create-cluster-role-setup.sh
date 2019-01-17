@@ -38,3 +38,26 @@ kubectl apply -f templates/substituted/cluster-admin-binding.yaml
 
 envsubst < templates/developers-log-reader-binding.template.yaml > templates/substituted/developers-log-reader-binding.yaml
 kubectl apply -f templates/substituted/developers-log-reader-binding.yaml
+
+envsubst < templates/view-binding.template.yaml > templates/substituted/view-binding.yaml
+kubectl apply -f templates/substituted/view-binding.yaml
+
+export TEAM_NAMES='cmc probate divorce'
+
+for TEAM_NAME in ${TEAM_NAMES}; do
+  NAMESPACE_EXISTS=$(kubectl get namespaces -o=jsonpath="{range .items[?(@.metadata.name=='${TEAM_NAME}')]}{.metadata.name}{'\n'}{end}")
+
+  if [ -z "${NAMESPACE_EXISTS}" ]; then 
+    echo "${TEAM_NAME} namespace doesn't exist, creating"
+    kubectl create namespace ${TEAM_NAME}
+
+  else
+    echo "${TEAM_NAME} namespace exists, skipping create"
+  fi 
+
+  echo "Adding view binding for team: ${TEAM_NAME}"
+  export TEAM_NAME=${TEAM_NAME}
+  export TEAM_GROUP=$(az ad group list --query  "[?displayName=='${TEAM_NAME}-developers'].objectId" -o tsv)
+  envsubst < templates/view-binding-team.template.yaml > templates/substituted/view-binding-${TEAM_NAME}.yaml
+  kubectl apply -f templates/substituted/view-binding-${TEAM_NAME}.yaml
+done
