@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-admins
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: "80b9d255-ed9e-417b-9eaa-90b4b974d9f3"
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: "9189d86a-e260-4c3d-8227-803123cdce84" # aks-cluster-admins
