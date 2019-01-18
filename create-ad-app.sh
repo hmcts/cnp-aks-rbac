@@ -48,4 +48,4 @@ echo "Server app display name: ${SERVER_APP_NAME}"
 echo "Client app ID: ${CLIENT_APP_ID}"
 echo "Client app display name: ${CLIENT_APP_NAME}"
 
-./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID}
+# ./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID}

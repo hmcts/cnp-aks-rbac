@@ -17,6 +17,12 @@ fi
 
 az group create --name ${BASE_NAME} --location uksouth
 
+SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+az ad sp create-for-rbac --name http://${BASE_NAME} \
+  --role contributor \
+  --scopes /subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${BASE_NAME}
+
 TENANT_ID=$(az account show --query tenantId -o tsv)
 
 az aks create \
