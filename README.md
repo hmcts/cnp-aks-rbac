@@ -39,3 +39,10 @@ The `<team-name>-developers` group in the team namespace has read (same exceptio
 There is also some environment variables that can be set to enable more permissions for developers:
 `DEVELOPERS_EDIT_TEAM_SCOPED` will give edit access in the team namespace
 `DEVELOPERS_EDIT_GLOBAL_SCOPED` will give edit access globally
+
+In order for a user to be able to log in to the cluster they need at least:
+`Azure Kubernetes Service Cluster User Role`
+This can be assigned with:
+`az role assignment create --assignee <user-or-group-id> --role "Azure Kubernetes Service Cluster User Role"`
+This role has been assigned to the developers group, there is no need to restrict access to it as RBAC rules govern what the user can do in the actual cluster, this role just gives access to log in.
+
