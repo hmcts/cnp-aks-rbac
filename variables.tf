@@ -8,10 +8,6 @@ variable "name" {
   default = "core-infra"
 }
 
-variable "deployment_target" {
-  default = ""
-}
-
 variable "address_space" {}
 
 variable "aks_cluster_name" {}

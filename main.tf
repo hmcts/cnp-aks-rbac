@@ -3,7 +3,7 @@ terraform {
 }
 
 locals {
-  deployment_env = "${var.env}${var.deployment_target}"
+  deployment_env = "${var.env}"
 }
 
 resource "azurerm_resource_group" "core_infra_rg" {
