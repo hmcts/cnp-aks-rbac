@@ -39,7 +39,7 @@ terraform init \
     -backend-config "storage_account_name=corestoragetest" \
     -backend-config "container_name=test" \
     -backend-config "resource_group_name=core-storage" \
-    -backend-config "key=aks/${BASE_NAME}-2/terraform.tfstate"
+    -backend-config "key=aks/${BASE_NAME}/terraform.tfstate"
 
 terraform apply -var-file ${BASE_NAME}.tfvars \
    -auto-approve
