@@ -4,4 +4,4 @@ common_tags = {
 }
 
 env = "sandbox"
-team_name = "cnp"
+vnet_rg = "core-infra-sandbox"

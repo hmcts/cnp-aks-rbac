@@ -6,12 +6,13 @@ SERVER_APP_PASSWORD="${3}"
 CLIENT_APP_ID="${4}"
 AKS_SP_CLIENT_ID="${5}"
 AKS_SP_CLIENT_PASSWORD="${6}"
+ENV="${7}
 
 function usage() {
-  echo "usage: ./create-aks.sh <aks-name> <server-app-id> <server-app-password> <client-app-id> <aks-sp-client_id> <aks-sp-client-password>" 
+  echo "usage: ./create-aks.sh <aks-name> <server-app-id> <server-app-password> <client-app-id> <aks-sp-client_id> <aks-sp-client-password> <env>" 
 }
 
-if [ -z "${BASE_NAME}" ] || [ -z "${SERVER_APP_ID}" ] || [ -z "${SERVER_APP_PASSWORD}" ] || [ -z "${CLIENT_APP_ID}" ] || [ -z "${AKS_SP_CLIENT_ID}" ] || [ -z "${AKS_SP_CLIENT_PASSWORD}" ]
+if [ -z "${BASE_NAME}" ] || [ -z "${SERVER_APP_ID}" ] || [ -z "${SERVER_APP_PASSWORD}" ] || [ -z "${CLIENT_APP_ID}" ] || [ -z "${AKS_SP_CLIENT_ID}" ] || [ -z "${AKS_SP_CLIENT_PASSWORD}" ] || [ -z "${ENV}" ]
 then
   usage
   exit 1
@@ -43,4 +44,4 @@ terraform init \
 terraform apply -var-file ${BASE_NAME}.tfvars \
    -auto-approve
 
-./create-cluster-role-setup.sh ${BASE_NAME}
+./create-cluster-role-setup.sh ${BASE_NAME} ${ENV}

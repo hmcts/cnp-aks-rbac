@@ -74,4 +74,4 @@ echo "Client app display name: ${CLIENT_APP_NAME}"
 echo "AKS SP client id: ${AKS_SP_APP_ID}"
 echo "AKS SP client secret: ${AKS_SP_APP_PASSWORD}"
 
-./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD}
+./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD} ${ENV}
