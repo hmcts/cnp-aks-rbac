@@ -8,9 +8,7 @@ variable "name" {
   default = "core-infra"
 }
 
-variable "address_space" {}
-
-variable "aks_cluster_name" {}
+variable "team_name" {}
 
 variable "aks_vm_size" {
   default = "Standard_B4ms"

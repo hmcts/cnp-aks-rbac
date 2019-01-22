@@ -14,19 +14,10 @@ fi
 export DEVELOPERS_GROUP=fbd14e44-da3c-4305-8731-0060f56c296f
 export AKS_CLUSTER_READER=3043c9ac-a03c-419c-89ac-cbe1e83d461d
 
-CLUSTER_ADMINS_GROUP="${BASE_NAME}-cluster-admins"
+CLUSTER_ADMINS_GROUP_NAME="${BASE_NAME}-cluster-admins"
+export CLUSTER_ADMIN_GROUP=$(az ad group list --query  "[?displayName=='${CLUSTER_ADMINS_GROUP_NAME}'].objectId" -o tsv)
 
-export CLUSTER_ADMIN_GROUP=$(az ad group list --query  "[?displayName=='${CLUSTER_ADMINS_GROUP}'].objectId" -o tsv)
-
-if [ -z "${CLUSTER_ADMIN_GROUP}" ]; then 
-  echo "Cluster admin group doesn't exist, creating"
-  export CLUSTER_ADMIN_GROUP=$(az ad group create  --display-name ${CLUSTER_ADMINS_GROUP} --mail-nickname ${CLUSTER_ADMINS_GROUP} --query objectId -o tsv)
-
-else
-  echo "Cluster admin group already exists, skipping create"
-fi 
-
-az aks get-credentials --resource-group ${BASE_NAME} --name ${BASE_NAME} --admin
+az aks get-credentials --resource-group ${BASE_NAME} --name ${BASE_NAME} --admin --overwrite
 
 mkdir -p templates/substituted
 
