@@ -4,4 +4,3 @@ common_tags = {
 }
 
 env = "sandbox"
-team_name = "cnp"

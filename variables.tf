@@ -8,8 +8,6 @@ variable "name" {
   default = "core-infra"
 }
 
-variable "team_name" {}
-
 variable "aks_vm_size" {
   default = "Standard_B4ms"
 }
@@ -34,3 +32,5 @@ variable "kubernetes_version" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "vnet_rg" {}

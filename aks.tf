@@ -1,12 +1,12 @@
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "${var.team_name}-${var.env}"
+  name                = "${var.name}-${var.env}"
   location            = "${var.location}"
-  resource_group_name = "${var.team_name}-${var.env}"
-  dns_prefix          = "${var.team_name}"
+  resource_group_name = "${var.env}"
+  dns_prefix          = "${var.name}"
   kubernetes_version  = "${var.kubernetes_version}"
 
   agent_pool_profile {
-    name            = "${var.team_name}${var.env}"
+    name            = "aks${replace(var.env, "-", "")}"
     count           = "${var.aks_initial_cluster_size}"
     vm_size         = "${var.aks_vm_size}"
     os_type         = "Linux"
