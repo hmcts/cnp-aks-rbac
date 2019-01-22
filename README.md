@@ -1,7 +1,9 @@
 # cnp-aks-rbac
 
-To create a cluster run:
-./create-ad-app.sh <cluster-name (i.e. timw-aks)>
+To create a cluster first a vnet needs to exist:
+`./create-vnet.sh <env i.e. sandbox> (clusters go into an existing vnet)`
+
+`./create-ad-app.sh <cluster-name (i.e. timw-aks)> <env>`
 
 This will setup all the AD applications, the AKS cluster and the cluster role config
 

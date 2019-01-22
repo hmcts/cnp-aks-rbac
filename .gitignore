@@ -1,2 +1,5 @@
 client-manifest.json
 templates/substituted/*.yaml
+
+terraform.sh
+.terraform/

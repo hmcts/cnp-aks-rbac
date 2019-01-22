@@ -1,15 +1,16 @@
 #!/bin/bash
 
 BASE_NAME="${1}"
+ENV="${2}"
 
 SERVER_APP_NAME="${BASE_NAME}-server"
 CLIENT_APP_NAME="${BASE_NAME}-client"
 
 function usage() {
-  echo "usage: ./create-ad-app.sh <app-name>" 
+  echo "usage: ./create-ad-app.sh <app-name> <env>" 
 }
 
-if [ -z "${BASE_NAME}" ]; then
+if [ -z "${BASE_NAME}" ] || [ -z "${ENV}" ] ; then
   usage
   exit 1
 fi
@@ -41,6 +42,28 @@ while true; do
     esac
 done
 
+az group create --name ${BASE_NAME} --location uksouth
+
+SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+
+VNET_RG=core-infra-${ENV}
+VNET_NAME=core-infra-${ENV}
+
+AKS_SP=$(az ad sp create-for-rbac --name http://${BASE_NAME} \
+  --role contributor \
+  --scopes /subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${BASE_NAME} /subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${VNET_RG}/providers/Microsoft.Network/virtualNetworks/${VNET_NAME})
+
+AKS_SP_APP_ID=$(echo ${AKS_SP} | jq -r .appId)
+AKS_SP_APP_PASSWORD=$(echo ${AKS_SP} | jq -r .password)
+
+CLUSTER_ADMINS_GROUP_NAME="${BASE_NAME}-cluster-admins"
+CLUSTER_ADMIN_GROUP=$(az ad group list --query  "[?displayName=='${CLUSTER_ADMINS_GROUP_NAME}'].objectId" -o tsv)
+
+if [ -z "${CLUSTER_ADMIN_GROUP}" ]; then 
+    echo "Cluster admin group doesn't exist, creating"
+    CLUSTER_ADMIN_GROUP=$(az ad group create  --display-name ${CLUSTER_ADMINS_GROUP_NAME} --mail-nickname ${CLUSTER_ADMINS_GROUP_NAME} --query objectId -o tsv)
+fi
+
 echo "Server app ID: ${SERVER_APP_ID}"
 echo "Server app password: ${SERVER_APP_PASSWORD}"
 echo "Server app display name: ${SERVER_APP_NAME}"
@@ -48,4 +71,7 @@ echo "Server app display name: ${SERVER_APP_NAME}"
 echo "Client app ID: ${CLIENT_APP_ID}"
 echo "Client app display name: ${CLIENT_APP_NAME}"
 
-./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID}
+echo "AKS SP client id: ${AKS_SP_APP_ID}"
+echo "AKS SP client secret: ${AKS_SP_APP_PASSWORD}"
+
+./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD}
