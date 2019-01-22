@@ -4,3 +4,4 @@ common_tags = {
 }
 
 env = "sandbox"
+vnet_rg = "core-infra-sandbox"
