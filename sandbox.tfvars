@@ -3,5 +3,4 @@ common_tags = {
     "Team Name" = "CNP"
 }
 
-env = "sandbox"
 vnet_rg = "core-infra-sandbox"
