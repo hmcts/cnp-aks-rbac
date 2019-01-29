@@ -1,5 +1,6 @@
 locals {
   resource_group_name = "${var.name}-${var.env}"
+  vnet_rg             = "core-infra-${var.env}"
 }
 
 resource "azurerm_route_table" "aks_subnet_route" {
@@ -23,13 +24,13 @@ data "azurerm_network_security_group" "default_nsg" {
 }
 
 data "azurerm_virtual_network" "vnet" {
-  name = "${var.vnet_rg}"
-  resource_group_name = "${var.vnet_rg}"
+  name                = "${var.env}"
+  resource_group_name = "${local.vnet_rg}"
 }
 
 resource "azurerm_subnet" "aks_sb" {
   name                      = "aks"
-  resource_group_name       = "${var.vnet_rg}"
+  resource_group_name       = "${local.vnet_rg}"
   virtual_network_name      = "${data.azurerm_virtual_network.vnet.name}"
   address_prefix            = "${cidrsubnet(element(data.azurerm_virtual_network.vnet.address_spaces, 0), 2, 3)}"
   service_endpoints         = ["Microsoft.KeyVault", "Microsoft.Storage"]
