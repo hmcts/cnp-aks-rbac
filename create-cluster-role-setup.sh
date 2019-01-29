@@ -18,7 +18,7 @@ export AKS_CLUSTER_READER=3043c9ac-a03c-419c-89ac-cbe1e83d461d
 CLUSTER_ADMINS_GROUP_NAME="${BASE_NAME}-cluster-admins"
 export CLUSTER_ADMIN_GROUP=$(az ad group list --query  "[?displayName=='${CLUSTER_ADMINS_GROUP_NAME}'].objectId" -o tsv)
 
-az aks get-credentials --resource-group ${ENV} --name ${BASE_NAME}-${ENV} --admin --overwrite
+az aks get-credentials --resource-group core-infra-${ENV} --name ${ENV} --admin --overwrite
 
 mkdir -p templates/substituted
 
