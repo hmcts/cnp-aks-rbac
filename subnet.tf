@@ -6,7 +6,7 @@ locals {
 resource "azurerm_route_table" "aks_subnet_route" {
   name                = "aks-${var.env}"
   location            = "${var.location}"
-  resource_group_name = "${var.vnet_rg}"
+  resource_group_name = "${local.vnet_rg}"
 
   route {
     name                   = "default"
@@ -20,7 +20,7 @@ resource "azurerm_route_table" "aks_subnet_route" {
 
 data "azurerm_network_security_group" "default_nsg" {
   name                = "default-${var.env}"
-  resource_group_name = "${var.vnet_rg}"
+  resource_group_name = "${local.vnet_rg}"
 }
 
 data "azurerm_virtual_network" "vnet" {
