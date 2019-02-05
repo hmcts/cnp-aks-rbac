@@ -47,7 +47,7 @@ az group create --name ${BASE_NAME} --location uksouth
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
 VNET_RG=core-infra-${ENV}
-VNET_NAME=core-infra-${ENV}
+VNET_NAME=${ENV}
 
 AKS_SP=$(az ad sp create-for-rbac --name http://${BASE_NAME} \
   --role contributor \

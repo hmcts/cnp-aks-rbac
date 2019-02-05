@@ -41,7 +41,7 @@ terraform init \
     -backend-config "resource_group_name=core-storage" \
     -backend-config "key=aks/${BASE_NAME}/terraform.tfstate"
 
-terraform apply -var-file ${BASE_NAME}.tfvars \
+terraform apply -var-file ${BASE_NAME}.tfvars -var name=${BASE_NAME} -var env=${ENV} \
    -auto-approve
 
 ./create-cluster-role-setup.sh ${BASE_NAME} ${ENV}

@@ -1,4 +1,4 @@
 common_tags = {
-    "Environment" = "sandbox"
+    "Environment" = "saat"
     "Team Name" = "CNP"
 }

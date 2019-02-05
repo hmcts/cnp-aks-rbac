@@ -6,10 +6,6 @@ variable "location" {
 
 variable "env" {}
 
-variable "name" {
-  default = "core-infra"
-}
-
 variable "common_tags" {
   type = "map"
 }

@@ -24,7 +24,6 @@ variable "aks_ad_client_app_id" {}
 variable "aks_ad_server_app_id" {}
 variable "aks_ad_server_app_secret" {}
 
-
 variable "kubernetes_version" {
   default = "1.11.5"
 }
@@ -32,5 +31,3 @@ variable "kubernetes_version" {
 variable "common_tags" {
   type = "map"
 }
-
-variable "vnet_rg" {}
