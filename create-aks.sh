@@ -6,13 +6,12 @@ SERVER_APP_PASSWORD="${3}"
 CLIENT_APP_ID="${4}"
 AKS_SP_CLIENT_ID="${5}"
 AKS_SP_CLIENT_PASSWORD="${6}"
-ENV="${7}"
 
 function usage() {
-  echo "usage: ./create-aks.sh <aks-name> <server-app-id> <server-app-password> <client-app-id> <aks-sp-client_id> <aks-sp-client-password> <env>"
+  echo "usage: ./create-aks.sh <aks-name> <server-app-id> <server-app-password> <client-app-id> <aks-sp-client_id> <aks-sp-client-password>"
 }
 
-if [ -z "${BASE_NAME}" ] || [ -z "${SERVER_APP_ID}" ] || [ -z "${SERVER_APP_PASSWORD}" ] || [ -z "${CLIENT_APP_ID}" ] || [ -z "${AKS_SP_CLIENT_ID}" ] || [ -z "${AKS_SP_CLIENT_PASSWORD}" ] || [ -z "${ENV}" ]
+if [ -z "${BASE_NAME}" ] || [ -z "${SERVER_APP_ID}" ] || [ -z "${SERVER_APP_PASSWORD}" ] || [ -z "${CLIENT_APP_ID}" ] || [ -z "${AKS_SP_CLIENT_ID}" ] || [ -z "${AKS_SP_CLIENT_PASSWORD}" ]
 then
   usage
   exit 1
@@ -41,7 +40,8 @@ terraform init \
     -backend-config "resource_group_name=core-storage" \
     -backend-config "key=aks/${BASE_NAME}/terraform.tfstate"
 
-terraform apply -var-file ${BASE_NAME}.tfvars -var name=${BASE_NAME} -var env=${ENV} \
+terraform apply -var name=${BASE_NAME} -var env=${BASE_NAME} \
    -auto-approve
 
-./create-cluster-role-setup.sh ${BASE_NAME} ${ENV}
+./create-cluster-role-setup.sh ${BASE_NAME}
+./create-aks-managed-identity.sh ${BASE_NAME} ${AKS_SP_CLIENT_ID}

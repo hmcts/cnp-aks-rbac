@@ -25,9 +25,12 @@ variable "aks_ad_server_app_id" {}
 variable "aks_ad_server_app_secret" {}
 
 variable "kubernetes_version" {
-  default = "1.11.5"
+  default = "1.12.5"
 }
 
 variable "common_tags" {
   type = "map"
+  default = {
+    "Environment" = "pleaseTagMe"
+  }
 }

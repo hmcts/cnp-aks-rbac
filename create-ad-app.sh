@@ -1,16 +1,15 @@
 #!/bin/bash
 
 BASE_NAME="${1}"
-ENV="${2}"
 
 SERVER_APP_NAME="${BASE_NAME}-server"
 CLIENT_APP_NAME="${BASE_NAME}-client"
 
 function usage() {
-  echo "usage: ./create-ad-app.sh <app-name> <env>" 
+  echo "usage: ./create-ad-app.sh <app-name>" 
 }
 
-if [ -z "${BASE_NAME}" ] || [ -z "${ENV}" ] ; then
+if [ -z "${BASE_NAME}" ] ; then
   usage
   exit 1
 fi
@@ -46,8 +45,8 @@ az group create --name ${BASE_NAME} --location uksouth
 
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
-VNET_RG=core-infra-${ENV}
-VNET_NAME=${ENV}
+VNET_RG=core-infra-${BASE_NAME}
+VNET_NAME=${BASE_NAME}
 
 AKS_SP=$(az ad sp create-for-rbac --name http://${BASE_NAME} \
   --role contributor \
@@ -74,4 +73,4 @@ echo "Client app display name: ${CLIENT_APP_NAME}"
 echo "AKS SP client id: ${AKS_SP_APP_ID}"
 echo "AKS SP client secret: ${AKS_SP_APP_PASSWORD}"
 
-./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD} ${ENV}
+./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD}
