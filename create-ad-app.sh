@@ -1,16 +1,15 @@
 #!/bin/bash
 
 BASE_NAME="${1}"
-ENV="${2}"
 
 SERVER_APP_NAME="${BASE_NAME}-server"
 CLIENT_APP_NAME="${BASE_NAME}-client"
 
 function usage() {
-  echo "usage: ./create-ad-app.sh <app-name> <env>" 
+  echo "usage: ./create-ad-app.sh <app-name>" 
 }
 
-if [ -z "${BASE_NAME}" ] || [ -z "${ENV}" ] ; then
+if [ -z "${BASE_NAME}" ] ; then
   usage
   exit 1
 fi
@@ -33,21 +32,22 @@ while true; do
 done
 
 CLIENT_APP_ID=$(az ad app create --display-name ${CLIENT_APP_NAME} --native-app --reply-urls http://localhost/client --required-resource-accesses @client-manifest.json  --query appId -o tsv)
+CLIENT_SP_OBJECT_ID=$(az ad sp create --id ${CLIENT_APP_ID} --query objectId -o tsv)
 
-while true; do
-    read -p "You now need to go to the portal, Azure AD -> app registrations -> ${CLIENT_APP_NAME} -> settings -> required permissions -> ${SERVER_APP_NAME} -> Select the check box next to Access ${SERVER_APP_NAME}, save and click grant permissions, after complete type (done)? " answer
-    case $answer in
-        [dD]* ) break;;
-        * ) echo "Please answer with 'done'";;
-    esac
-done
+# without the sleep I was getting: 
+# Operation failed with status: 'Bad Request'. Details: 400 Client Error: Bad Request for url: https://graph.windows.net/a0d77fc4-df1e-4b0d-8e35-46750ca5a672/oauth2PermissionGrants?api-version=1.6
+sleep 5
+
+# You can only add delegated permissions via the CLI
+# see support case: 119011625000863
+az ad app permission grant --id ${CLIENT_SP_OBJECT_ID} --api ${SERVER_APP_ID}
 
 az group create --name ${BASE_NAME} --location uksouth
 
 SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
-VNET_RG=core-infra-${ENV}
-VNET_NAME=${ENV}
+VNET_RG=core-infra-${BASE_NAME}
+VNET_NAME=${BASE_NAME}
 
 AKS_SP=$(az ad sp create-for-rbac --name http://${BASE_NAME} \
   --role contributor \
@@ -74,4 +74,4 @@ echo "Client app display name: ${CLIENT_APP_NAME}"
 echo "AKS SP client id: ${AKS_SP_APP_ID}"
 echo "AKS SP client secret: ${AKS_SP_APP_PASSWORD}"
 
-./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD} ${ENV}
+./create-aks.sh ${BASE_NAME} ${SERVER_APP_ID} ${SERVER_APP_PASSWORD} ${CLIENT_APP_ID} ${AKS_SP_APP_ID} ${AKS_SP_APP_PASSWORD}

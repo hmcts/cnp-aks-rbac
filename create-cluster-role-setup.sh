@@ -1,13 +1,12 @@
 #!/bin/bash
 
 BASE_NAME="${1}"
-ENV="${2}"
 
 function usage() {
-  echo "usage: ./create-aks.sh <aks-name> <env>"
+  echo "usage: ./create-aks.sh <aks-name>"
 }
 
-if [ -z "${BASE_NAME}" ] || [ -z "${ENV}" ]; then
+if [ -z "${BASE_NAME}" ]; then
   usage
   exit 1
 fi
@@ -18,7 +17,7 @@ export AKS_CLUSTER_READER=3043c9ac-a03c-419c-89ac-cbe1e83d461d
 CLUSTER_ADMINS_GROUP_NAME="${BASE_NAME}-cluster-admins"
 export CLUSTER_ADMIN_GROUP=$(az ad group list --query  "[?displayName=='${CLUSTER_ADMINS_GROUP_NAME}'].objectId" -o tsv)
 
-az aks get-credentials --resource-group core-infra-${ENV} --name ${ENV} --admin --overwrite
+az aks get-credentials --resource-group core-infra-${BASE_NAME} --name ${BASE_NAME} --admin --overwrite
 
 mkdir -p templates/substituted
 
