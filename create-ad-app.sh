@@ -32,14 +32,15 @@ while true; do
 done
 
 CLIENT_APP_ID=$(az ad app create --display-name ${CLIENT_APP_NAME} --native-app --reply-urls http://localhost/client --required-resource-accesses @client-manifest.json  --query appId -o tsv)
+CLIENT_SP_OBJECT_ID=$(az ad sp create --id ${CLIENT_APP_ID} --query objectId -o tsv)
 
-while true; do
-    read -p "You now need to go to the portal, Azure AD -> app registrations -> ${CLIENT_APP_NAME} -> settings -> required permissions -> ${SERVER_APP_NAME} -> Select the check box next to Access ${SERVER_APP_NAME}, save and click grant permissions, after complete type (done)? " answer
-    case $answer in
-        [dD]* ) break;;
-        * ) echo "Please answer with 'done'";;
-    esac
-done
+# without the sleep I was getting: 
+# Operation failed with status: 'Bad Request'. Details: 400 Client Error: Bad Request for url: https://graph.windows.net/a0d77fc4-df1e-4b0d-8e35-46750ca5a672/oauth2PermissionGrants?api-version=1.6
+sleep 5
+
+# You can only add delegated permissions via the CLI
+# see support case: 119011625000863
+az ad app permission grant --id ${CLIENT_SP_OBJECT_ID} --api ${SERVER_APP_ID}
 
 az group create --name ${BASE_NAME} --location uksouth
 
