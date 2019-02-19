@@ -57,11 +57,12 @@ $ kubectl -n ag-poc logs -f replicaset.apps/app-gw-ingress-ingress-azure-564b847
 
 If there is an error provisioning it doesn't seem to retry, I had to delete and recreate the ingress to force an update to happen. (Error occurred because the identity didn't have enough permissions in the resource group)
 
-When I created the secret in the wrong namespace there was no failure logs the AG just wasn't updated, 
-as soon as I created the secret is started working, I didn't have to change the ingress at all.
+When I created the secret in the wrong namespace there was no failure logs and the AG wasn't updated, 
+as soon as I created the secret it started working, I didn't have to change the ingress at all.
 
 Do not run the ARM template for creating the application gateway after the ingress controller has taken
 over management of it, the gateway is reset to the ARM definition and then the ingress rules need recreating in the cluster. If the application gateway needs an update (i.e. cipher or TLS protocol)
+then this should be done via CLI / Powershell.
 
 ### TLS
 
