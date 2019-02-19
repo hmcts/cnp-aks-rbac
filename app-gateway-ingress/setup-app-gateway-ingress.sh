@@ -4,7 +4,7 @@ cd -P -- "$(dirname -- "$0")"
 export BASE_NAME=${1}
 
 function usage() {
-  echo "usage: ./create-app-gateway-ingress-controller.sh <base-name>"
+  echo "usage: ./setup-app-gateway-ingress.sh <base-name>"
 }
 
 if [ -z "${BASE_NAME}" ]
@@ -27,5 +27,11 @@ envsubst < templates/helm-config.template.yaml > templates/substituted/helm-conf
 envsubst < templates/ingress-identity-binding.template.yaml > templates/substituted/ingress-identity-binding.yaml
 
 kubectl apply -f templates/substituted/ingress-identity-binding.yaml
+
+export IDENTITY_CLIENT_ID=$(az identity show -g ${NODE_RESOURCE_GROUP} -n ${BASE_NAME} --query clientId -o tsv)
+# needs: Microsoft.Network/applicationGateways/write
+az role assignment create --role "Network Contributor" --assignee ${IDENTITY_CLIENT_ID} --scope /subscriptions/${SUBSCRIPTION_ID}/resourcegroups/${NODE_RESOURCE_GROUP}
+
+az group deployment create --name ag -g ${NODE_RESOURCE_GROUP}  --template-file app-gateway.json
 
 helm install -f templates/substituted/helm-config.yaml  --namespace ag-poc application-gateway-kubernetes-ingress/ingress-azure --name app-gw-ingress

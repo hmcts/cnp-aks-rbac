@@ -1,13 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: guestbook
+  name: guestbook-https
   namespace: ag-poc
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
 spec:
+  tls:
+    - hosts:
+      - d8383fdb-2ccf-4a21-ab72-efa5f91a6a3f.cloudapp.net
+      secretName: guestbook-cert
   rules:
-  - http:
+  - host: d8383fdb-2ccf-4a21-ab72-efa5f91a6a3f.cloudapp.net
+    http:
       paths:
       - backend:
           serviceName: frontend

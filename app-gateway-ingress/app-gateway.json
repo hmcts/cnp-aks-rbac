@@ -4,10 +4,10 @@
   "parameters": {
     "vnetName": {
       "defaultValue": "timj",
-        "type": "string",
-        "metadata": {
-          "description": "VNET name."
-        }
+      "type": "string",
+      "metadata": {
+        "description": "VNET name."
+      }
     },
     "applicationGatewaySubnetAddressPrefix": {
       "defaultValue": "10.160.128.0/24",
@@ -156,7 +156,32 @@
               }
             }
           }
-        ]
+        ],
+        "webApplicationFirewallConfiguration": {
+          "enabled": true,
+          "firewallMode": "Prevention",
+          "ruleSetType": "OWASP",
+          "ruleSetVersion": "3.0",
+          "disabledRuleGroups": [
+            {
+              "ruleGroupName": "REQUEST-931-APPLICATION-ATTACK-RFI",
+              "rules": [
+                931130
+              ]
+            }
+          ]
+        },
+        "sslPolicy": {
+          "policyType": "Custom",
+          "cipherSuites": [
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
+          ],
+          "minProtocolVersion": "TLSv1_2"
+        }
       },
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', parameters('applicationGatewayName'))]"
