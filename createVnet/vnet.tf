@@ -10,11 +10,3 @@ resource "azurerm_virtual_network" "vnet" {
 
   tags = "${var.common_tags}"
 }
-
-resource "azurerm_network_security_group" "default_nsg" {
-  name                = "default-${var.env}"
-  location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.core_infra_rg.name}"
-
-  tags = "${var.common_tags}"
-}

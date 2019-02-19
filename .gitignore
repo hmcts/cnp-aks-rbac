@@ -1,5 +1,6 @@
 client-manifest.json
 templates/substituted/*.yaml
+app-gateway-ingress/templates/substituted/*.yaml
 
 terraform.sh
 .terraform/

@@ -1,0 +1,7 @@
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentityBinding
+metadata:
+  name: app-gw-ingress-ingress-azure-binding
+spec:
+  AzureIdentity: ${BASE_NAME}
+  Selector: app-gw-ingress-ingress-azure
