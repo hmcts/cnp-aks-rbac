@@ -80,7 +80,7 @@ $ kubectl create secret tls guestbook-cert --key key.pem --cert cert.pem -n ag-p
 
 There's a script provided to pull a certificate from Azure Key Vault and store it as a Kubernetes secret:
 ```
-"$ ./create-kube-secret-from-keyvault.sh <keyvault-name> <certificate-name> <kube-secret-name> <kube-namespace-name>" 
+$ ./create-kube-secret-from-keyvault.sh <keyvault-name> <certificate-name> <kube-secret-name> <kube-namespace-name>
 ```
 
 You can create a self signed certificate for testing with:
