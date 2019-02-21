@@ -71,7 +71,7 @@ Updating ingress, i.e. changing hostname works
 Single app gateway with multiple applications works, they don't have to be declared in the same ingress file
 Multiple app gateways also works, but must watch a different namespace, i.e. cmc, divorce
 
-### TLS
+### TLS
 
 The TLS certificate needs to be stored in a Kubernetes secret
 ```
@@ -104,9 +104,9 @@ and then applied:
 $ kubectl apply -f ag-tls.yaml
 ```
 
-### How long does it take?
+### How long does it take?
 
-### WAF SKU
+### WAF SKU
 I saw it take from 3-14 minutes to update the gateway
 
 ### WAF_v2
